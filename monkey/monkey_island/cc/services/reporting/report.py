@@ -44,7 +44,8 @@ class ReportService:
             'HadoopExploiter': 'Hadoop/Yarn Exploiter',
             'MSSQLExploiter': 'MSSQL Exploiter',
             'VSFTPDExploiter': 'VSFTPD Backdoor Exploiter',
-            'DrupalExploiter': 'Drupal Server Exploiter'
+            'DrupalExploiter': 'Drupal Server Exploiter',
+	    'testVSFTPDExploiter': 'testVSFTPD Backdoor Exploiter'
         }
 
     class ISSUES_DICT(Enum):
@@ -62,7 +63,8 @@ class ReportService:
         PTH_CRIT_SERVICES_ACCESS = 11
         MSSQL = 12
         VSFTPD = 13
-        DRUPAL = 14
+        testVSFTPD = 14
+	
 
     class WARNINGS_DICT(Enum):
         CROSS_SEGMENT = 0
@@ -307,6 +309,12 @@ class ReportService:
         return processed_exploit
 
     @staticmethod
+    def process_testvsftpd_exploit(exploit):
+        processed_exploit = ReportService.process_general_creds_exploit(exploit)
+        processed_exploit['type'] = 'testvsftp'
+        return processed_exploit
+
+    @staticmethod
     def process_sambacry_exploit(exploit):
         processed_exploit = ReportService.process_general_creds_exploit(exploit)
         processed_exploit['type'] = 'sambacry'
@@ -379,7 +387,8 @@ class ReportService:
             'HadoopExploiter': ReportService.process_hadoop_exploit,
             'MSSQLExploiter': ReportService.process_mssql_exploit,
             'VSFTPDExploiter': ReportService.process_vsftpd_exploit,
-            'DrupalExploiter': ReportService.process_drupal_exploit
+            'DrupalExploiter': ReportService.process_drupal_exploit,
+	    'testVSFTPDExploiter': ReportService.process_testvsftpd_exploit
         }
 
         return EXPLOIT_PROCESS_FUNCTION_DICT[exploiter_type](exploit)
@@ -673,8 +682,8 @@ class ReportService:
                     issues_byte_array[ReportService.ISSUES_DICT.WEBLOGIC.value] = True
                 elif issue['type'] == 'mssql':
                     issues_byte_array[ReportService.ISSUES_DICT.MSSQL.value] = True
-                elif issue['type'] == 'hadoop':
-                    issues_byte_array[ReportService.ISSUES_DICT.HADOOP.value] = True
+                elif issue['type'] == 'testvsftp':
+                    issues_byte_array[ReportService.ISSUES_DICT.testVSFTPD.value] = True
                 elif issue['type'] == 'drupal':
                     issues_byte_array[ReportService.ISSUES_DICT.DRUPAL.value] = True
                 elif issue['type'].endswith('_password') and issue['password'] in config_passwords and \
