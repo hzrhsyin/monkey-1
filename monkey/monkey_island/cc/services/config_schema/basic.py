@@ -28,7 +28,7 @@ BASIC = {
                         "VSFTPDExploiter",
                         "MSSQLExploiter",
                         "DrupalExploiter",
-			"testVSFTPDExploiter"
+			            "testVSFTPDExploiter"
                     ]
                 }
             }
